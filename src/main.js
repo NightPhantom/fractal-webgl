@@ -72,22 +72,52 @@ function main() {
     // Initial display of values
     updateInfoDisplay(state);
 
+    // For FPS calculation
+    let lastTime = 0;
+    const fpsElement = document.querySelector("#fps");
+    const frameTimes = [];
+    let frameCursor = 0;
+    let numFrames = 0;
+    const maxFrames = 20;
+    let totalFPS = 0.0;
+    const avgFpsElement = document.querySelector("#avg");
+
     // Draw the scene repeatedly
     function render(now) {
 
         const timeInSeconds = now * 0.001;
 
+        // FPS calculation
+        if (fpsElement && avgFpsElement) {
+            // FPS
+            const deltaTime = timeInSeconds - lastTime; // Time since last frame
+            lastTime = timeInSeconds; // Update last time for next frame
+            const fps = 1.0 / deltaTime; // Calculate FPS
+            fpsElement.textContent = fps.toFixed(1); // Display current FPS
+            // Average FPS
+            totalFPS += fps - (frameTimes[frameCursor] || 0); // Add the current fps and the remove the oldest
+            frameTimes[frameCursor++] = fps; // Store the latest fps
+            numFrames = Math.max(numFrames, frameCursor);
+            frameCursor %= maxFrames; // Wrap around the cursor
+            const avgFPS = totalFPS / numFrames; // Calculate average FPS
+            avgFpsElement.textContent = avgFPS.toFixed(1); // Display average FPS
+        }
+
+        // Animate color shift if enabled
         if (state.colorAnimation.enabled) {
             state.colorShift = (timeInSeconds * state.colorAnimation.speed) % 1.0;
         }
 
+        // Set the shader program to use
         gl.useProgram(programInfo.program);
 
+        // Set attributes for drawing
         gl.uniform2f(programInfo.uniformLocations.resolution, gl.canvas.width, gl.canvas.height);
         gl.uniform2f(programInfo.uniformLocations.center, state.center.x, state.center.y);
         gl.uniform1f(programInfo.uniformLocations.zoom, state.zoom);
         gl.uniform1f(programInfo.uniformLocations.colorShift, state.colorShift);
 
+        // Draw the scene and queue the next frame
         drawScene(gl, programInfo, buffers);
         requestAnimationFrame(render);
     }
@@ -207,7 +237,7 @@ function setupKeyboardControls(state) {
                 state.colorAnimation.speed = Math.min(2.0, state.colorAnimation.speed + 0.05);
                 break;
         }
-        
+
         updateInfoDisplay(state);
     });
 }
