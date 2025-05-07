@@ -47,6 +47,9 @@ python -m http.server
 ```
 Then navigate to `http://localhost:8000`
 
+### Use it online
+- Go to http://fractal.andrescosta.com/
+
 ## Project Structure
 
 - `src/index.html` - Main HTML page
