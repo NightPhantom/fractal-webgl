@@ -53,6 +53,9 @@ function main() {
 
     // Initialize camera state
     const state = {
+        gl: gl,
+        programInfo: programInfo,
+        buffers: buffers,
         center: { x: -0.5, y: 0.0 },
         zoom: 450.0,
         moveStep: 3.0,
@@ -182,7 +185,31 @@ function setupUIControls(state) {
         state.zoom /= state.zoomFactor;
         updateInfoDisplay(state);
     });
+
+    document.getElementById('screenshot').addEventListener('click', () => {
+        const canvas = document.querySelector("#gl-canvas");
+        drawScene(state.gl, state.programInfo, state.buffers); // Ensure the latest frame is drawn
+        canvas.toBlob((blob) => {
+            saveBlob(blob, `mandelbrot-capture-${canvas.width}x${canvas.height}.png`);
+        });
+    });
 }
+
+const saveBlob = (function () {
+    const a = document.createElement('a');
+    document.body.appendChild(a);
+    a.style.display = 'none';
+    return function (blob, fileName) {
+        const url = window.URL.createObjectURL(blob);
+        a.href = url;
+        a.download = fileName;
+        a.click();
+        // Clean up by revoking the object URL
+        setTimeout(() => {
+            window.URL.revokeObjectURL(url);
+        }, 0);
+    };
+})();
 
 /**
  * Sets up keyboard controls for the application
