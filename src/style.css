@@ -1,0 +1,100 @@
+/* Licensed under a BSD license. See ../license.html for license */
+
+html {
+    box-sizing: border-box;
+}
+
+*,
+*:before,
+*:after {
+    box-sizing: inherit;
+    user-select: none;
+}
+
+body {
+    background-color: #aaa;
+    font-family: Sans-Serif;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    overflow: hidden;
+}
+
+canvas {
+    background-color: #fff;
+    width: 100vw;
+    height: 100vh;
+    flex: 1;
+    display: block;
+}
+
+.controls {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background-color: rgba(0, 0, 0, 0.6);
+    padding: 10px;
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    color: white;
+}
+
+.nav-controls {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+}
+
+.horizontal-controls {
+    display: flex;
+    gap: 30px;
+}
+
+.zoom-controls {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 5px;
+}
+
+button {
+    width: 40px;
+    height: 40px;
+    font-size: 20px;
+    border-radius: 5px;
+    background-color: #444;
+    color: white;
+    border: 1px solid #666;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #555;
+}
+
+.info {
+    margin-top: 10px;
+    font-size: 14px;
+    padding: 10px;
+    border-style: solid;
+    border-radius: 8px;
+    box-shadow: inset 1px 1px 5px black;
+}
+
+.centered {
+    text-align: center;
+}
+
+.instructions {
+    font-size: 12px;
+    color: grey;
+    margin-top: 5px;
+    padding: 10px;
+    border-style: solid;
+    border-radius: 8px;
+    box-shadow: inset 1px 1px 5px black;
+}

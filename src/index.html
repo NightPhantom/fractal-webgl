@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <title>WebGL Demo</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="main.js" type="module"></script>
+</head>
+
+<body>
+    <canvas id="gl-canvas" width="1920" height="1080" style="border:1px solid teal;"></canvas>
+    <div class="controls">
+        <div class="nav-controls">
+            <button id="up">↑</button>
+            <div class="horizontal-controls">
+                <button id="left">←</button>
+                <button id="right">→</button>
+            </div>
+            <button id="down">↓</button>
+        </div>
+        <div class="zoom-controls">
+            <button id="zoom-in">+</button>
+            <button id="zoom-out">-</button>
+        </div>
+        <div class="info">
+            <div>Center: <span id="center-value">(0.0, 0.0)</span></div>
+            <div>Zoom: <span id="zoom-value">1.0</span>×</div>
+            <div>Color: <span id="animation-status">Static</span></div>
+        </div>
+        <div class="instructions">
+            <h3 class="centered">Controls</h3>
+            <div class="keyboard-controls">
+                <h4>Keyboard</h4>
+                <ul>
+                    <li>Arrow keys: Move around</li>
+                    <li>+ / -: Zoom in/out</li>
+                    <li>A: Toggle color animation</li>
+                    <li>&lt; / &gt;: Decrease/increase animation speed</li>
+                    <li>R: Reset view</li>
+                    <li>C: Change color (when static)</li>
+                </ul>
+            </div>
+            <div class="mouse-controls">
+                <h4>Mouse</h4>
+                <ul>
+                    <li>Scroll wheel: Zoom in/out (centered on cursor)</li>
+                    <li>Drag: Move view</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
