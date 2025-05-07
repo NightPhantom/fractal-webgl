@@ -98,3 +98,7 @@ button:hover {
     border-radius: 8px;
     box-shadow: inset 1px 1px 5px black;
 }
+
+.footer {
+    font-size: 12px;
+}
