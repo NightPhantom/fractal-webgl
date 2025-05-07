@@ -45,6 +45,7 @@ function main() {
             center: gl.getUniformLocation(shaderProgram, "uCenter"),
             zoom: gl.getUniformLocation(shaderProgram, "uZoom"),
             colorShift: gl.getUniformLocation(shaderProgram, "uColorShift"),
+            maxIterations: gl.getUniformLocation(shaderProgram, "uMaxIterations"),
         },
     };
 
@@ -65,6 +66,7 @@ function main() {
             enabled: true,
             speed: 0.15,
         },
+        maxIterations: 200,
     };
 
     // Configure controls
@@ -119,6 +121,7 @@ function main() {
         gl.uniform2f(programInfo.uniformLocations.center, state.center.x, state.center.y);
         gl.uniform1f(programInfo.uniformLocations.zoom, state.zoom);
         gl.uniform1f(programInfo.uniformLocations.colorShift, state.colorShift);
+        gl.uniform1i(programInfo.uniformLocations.maxIterations, state.maxIterations);
 
         // Draw the scene and queue the next frame
         drawScene(gl, programInfo, buffers);
@@ -148,6 +151,9 @@ function updateInfoDisplay(state) {
     if (document.getElementById('animation-status')) {
         document.getElementById('animation-status').textContent =
             state.colorAnimation.enabled ? `Animated (${state.colorAnimation.speed.toFixed(2)}×)` : 'Static';
+    }
+    if (document.getElementById('iterations-value')) {
+        document.getElementById('iterations-value').textContent = state.maxIterations;
     }
 }
 
@@ -190,9 +196,22 @@ function setupUIControls(state) {
         const canvas = document.querySelector("#gl-canvas");
         drawScene(state.gl, state.programInfo, state.buffers); // Ensure the latest frame is drawn
         canvas.toBlob((blob) => {
-            saveBlob(blob, `mandelbrot-capture-${canvas.width}x${canvas.height}.png`);
+            saveBlob(blob, `mandelbrot-capture-${canvas.width}x${canvas.height}-${new Date().toISOString().replace(/:/g, '-')}.png`);
         });
     });
+
+    const iterationsSlider = document.getElementById('iterations-slider');
+    const iterationsValue = document.getElementById('iterations-value');
+
+    if (iterationsSlider && iterationsValue) {
+        iterationsSlider.value = state.maxIterations;
+        iterationsValue.textContent = state.maxIterations;
+
+        iterationsSlider.addEventListener('input', () => {
+            state.maxIterations = parseInt(iterationsSlider.value);
+            iterationsValue.textContent = state.maxIterations;
+        });
+    }
 }
 
 const saveBlob = (function () {
@@ -246,6 +265,7 @@ function setupKeyboardControls(state) {
                 state.colorShift = 0.7;
                 state.colorAnimation.enabled = true;
                 state.colorAnimation.speed = 0.15;
+                state.maxIterations = 200;
                 break;
             case 'c': // Change color
             case 'C':
@@ -262,6 +282,18 @@ function setupKeyboardControls(state) {
             case '>': // Increase color animation speed
             case '.':
                 state.colorAnimation.speed = Math.min(2.0, state.colorAnimation.speed + 0.05);
+                break;
+            case '[': // Decrease iterations
+                state.maxIterations = Math.max(10, state.maxIterations - 10);
+                if (document.getElementById('iterations-slider')) {
+                    document.getElementById('iterations-slider').value = state.maxIterations;
+                }
+                break;
+            case ']': // Increase iterations
+                state.maxIterations = Math.min(5000, state.maxIterations + 10);
+                if (document.getElementById('iterations-slider')) {
+                    document.getElementById('iterations-slider').value = state.maxIterations;
+                }
                 break;
         }
 

@@ -10,6 +10,9 @@ An interactive Mandelbrot set fractal explorer built with WebGL for high-perform
 - Smooth zoom and pan controls with mouse and keyboard support
 - Interactive UI with buttons for navigation
 - Dynamic color cycling with adjustable animation speed
+- Adjustable iteration count to increase and decrease level of detail.
+- Screenshot capture functionality.
+- FPS counter for real-time performance monitoring.
 
 ## How It Works
 
@@ -30,6 +33,7 @@ The application uses WebGL fragment shaders to perform the Mandelbrot set calcul
 - **+/-**: Zoom in/out
 - **A**: Toggle color animation
 - **</>**: Decrease/increase animation speed
+- **[/]**: Decrease/increase iterations
 - **C**: Change color (when animation is disabled)
 - **R**: Reset view to default position
 
@@ -48,7 +52,7 @@ python -m http.server
 Then navigate to `http://localhost:8000`
 
 ### Use it online
-- Go to http://fractal.andrescosta.com/
+- Go to [https://fractal.andrescosta.com](https://fractal.andrescosta.com)
 
 ## Project Structure
 
@@ -65,10 +69,8 @@ Then navigate to `http://localhost:8000`
 
 ## Future Improvements
 
-- Save screenshots
 - Julia set visualization option
 - Save/load specific views
-- Adjustable iteration depth setting
 
 ## License
 

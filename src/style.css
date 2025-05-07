@@ -61,10 +61,27 @@ canvas {
     margin-top: 5px;
 }
 
+.utility-controls {
+    display: flex;
+    flex-direction: row;
+}
+
 .utility-controls button {
     font-size: 14px;
     padding: 10px;
     width: auto;
+}
+
+.slider-container {
+    margin-left: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+#iterations-slider {
+    width: 100%;
+    margin-top: 5px;
 }
 
 button {

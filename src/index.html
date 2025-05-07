@@ -25,6 +25,10 @@
         </div>
         <div class="utility-controls">
             <button id="screenshot" type="button">📷</button>
+            <div class="slider-container">
+                <label for="iterations-slider">Iterations: <span id="iterations-value">200</span></label>
+                <input type="range" id="iterations-slider" min="10" max="5000" value="200" step="10">
+            </div>
         </div>
         <div class="info">
             <div>Center: <span id="center-value">(0.0, 0.0)</span></div>
@@ -41,6 +45,7 @@
                     <li>+ / -: Zoom in/out</li>
                     <li>A: Toggle color animation</li>
                     <li>&lt; / &gt;: Decrease/increase animation speed</li>
+                    <li>[ / ]: Decrease/increase iterations</li>
                     <li>R: Reset view</li>
                     <li>C: Change color (when static)</li>
                 </ul>
