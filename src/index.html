@@ -3,6 +3,7 @@
 
 <head>
     <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
     <title>WebGL Demo</title>
     <link rel="stylesheet" href="style.css">
     <script src="main.js" type="module"></script>
@@ -10,58 +11,73 @@
 
 <body>
     <canvas id="gl-canvas" width="1920" height="1080" style="border:1px solid teal;"></canvas>
-    <div class="controls">
-        <div class="nav-controls">
-            <button id="up">↑</button>
-            <div class="horizontal-controls">
-                <button id="left">←</button>
-                <button id="right">→</button>
+    <div class="overlay">
+        <div class="column-left">
+            <div class="controls">
+                <div class="nav-controls">
+                    <button id="up">↑</button>
+                    <div class="horizontal-controls">
+                        <button id="left">←</button>
+                        <button id="right">→</button>
+                    </div>
+                    <button id="down">↓</button>
+                </div>
+                <div class="zoom-controls">
+                    <button id="zoom-in">+</button>
+                    <button id="zoom-out">-</button>
+                </div>
+                <div class="utility-controls">
+                    <button id="screenshot" type="button">📷</button>
+                    <div class="slider-container">
+                        <label for="iterations-slider">Iterations: <span id="iterations-value">200</span></label>
+                        <input type="range" id="iterations-slider" min="10" max="5000" value="200" step="10">
+                    </div>
+                </div>
             </div>
-            <button id="down">↓</button>
-        </div>
-        <div class="zoom-controls">
-            <button id="zoom-in">+</button>
-            <button id="zoom-out">-</button>
-        </div>
-        <div class="utility-controls">
-            <button id="screenshot" type="button">📷</button>
-            <div class="slider-container">
-                <label for="iterations-slider">Iterations: <span id="iterations-value">200</span></label>
-                <input type="range" id="iterations-slider" min="10" max="5000" value="200" step="10">
-            </div>
-        </div>
-        <div class="info">
-            <div>Center: <span id="center-value">(0.0, 0.0)</span></div>
-            <div>Zoom: <span id="zoom-value">1.0</span>×</div>
-            <div>Color: <span id="animation-status">Static</span></div>
-            <div>FPS: <span id="fps"></span> (avg: <span id="avg"></span>)</div>
-        </div>
-        <div class="instructions">
-            <h3 class="centered">Controls</h3>
-            <div class="keyboard-controls">
-                <h4>Keyboard</h4>
-                <ul>
-                    <li>Arrow keys: Move around</li>
-                    <li>+ / -: Zoom in/out</li>
-                    <li>A: Toggle color animation</li>
-                    <li>&lt; / &gt;: Decrease/increase animation speed</li>
-                    <li>[ / ]: Decrease/increase iterations</li>
-                    <li>R: Reset view</li>
-                    <li>C: Change color (when static)</li>
-                </ul>
-            </div>
-            <div class="mouse-controls">
-                <h4>Mouse</h4>
-                <ul>
-                    <li>Scroll wheel: Zoom in/out (centered on cursor)</li>
-                    <li>Drag: Move view</li>
-                </ul>
+            <div class="info">
+                <div>Center: <span id="center-value">(0.0, 0.0)</span></div>
+                <div>Zoom: <span id="zoom-value">1.0</span>×</div>
+                <div>Color: <span id="animation-status">Static</span></div>
+                <div>FPS: <span id="fps"></span> (avg: <span id="avg"></span>)</div>
             </div>
         </div>
-        <div class="footer centered">
-            <p>&copy; 2025 Andy Costa. <a href="https://github.com/NightPhantom/fractal-webgl"
-                    target="_blank">Source</a></p>
+        <div class="column-right">
+            <div class="instructions">
+                <h3 class="centered">Controls</h3>
+                <div class="keyboard-controls">
+                    <h4>Keyboard</h4>
+                    <ul>
+                        <li>Arrow keys: Move around</li>
+                        <li>+ / -: Zoom in/out</li>
+                        <li>A: Toggle color animation</li>
+                        <li>&lt; / &gt;: Decrease/increase animation speed</li>
+                        <li>[ / ]: Decrease/increase iterations</li>
+                        <li>R: Reset view</li>
+                        <li>C: Change color (when static)</li>
+                    </ul>
+                </div>
+                <div class="mouse-controls">
+                    <h4>Mouse</h4>
+                    <ul>
+                        <li>Scroll wheel: Zoom in/out (centered on cursor)</li>
+                        <li>Drag: Move view</li>
+                    </ul>
+                </div>
+                <div class="touch-controls">
+                    <h4>Touch</h4>
+                    <ul>
+                        <li>Drag: Pan view</li>
+                        <li>Pinch: Zoom in/out</li>
+                        <li>Double-tap: Zoom in</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer centered">
+                <p>&copy; 2025 Andy Costa. <a href="https://github.com/NightPhantom/fractal-webgl"
+                        target="_blank">Source</a></p>
+            </div>
         </div>
+    </div>
 </body>
 
 </html>

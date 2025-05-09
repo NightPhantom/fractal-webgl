@@ -13,6 +13,7 @@ An interactive Mandelbrot set fractal explorer built with WebGL for high-perform
 - Adjustable iteration count to increase and decrease level of detail.
 - Screenshot capture functionality.
 - FPS counter for real-time performance monitoring.
+- Support for touch controls
 
 ## How It Works
 

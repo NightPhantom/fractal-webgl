@@ -73,6 +73,7 @@ function main() {
     setupUIControls(state);
     setupKeyboardControls(state);
     setupMouseControls(canvas, state);
+    setupTouchControls(canvas, state);
 
     // Initial display of values
     updateInfoDisplay(state);
@@ -362,4 +363,134 @@ function setupMouseControls(canvas, state) {
 
         updateInfoDisplay(state);
     });
+}
+
+function setupTouchControls(canvas, state) {
+
+    // Variables for touch handling
+    let lastTouchX, lastTouchY;
+    let initialPinchDistance = 0;
+    let lastTapTime = 0;
+
+    // Touch start handler
+    canvas.addEventListener('touchstart', (event) => {
+        event.preventDefault();
+
+        // Store last touch time for double-tap detection
+        const currentTime = new Date().getTime();
+        const tapLength = currentTime - lastTapTime;
+
+        // Handle double tap (zoom in)
+        if (tapLength < 300 && tapLength > 0 && event.touches.length === 1) {
+            // Get touch position
+            const touch = event.touches[0];
+            const rect = canvas.getBoundingClientRect();
+            const touchX = touch.clientX - rect.left;
+            const touchY = touch.clientY - rect.top;
+
+            // Convert to complex plane coordinates (similar to wheel zoom)
+            const complexX = (touchX - canvas.width / 2) / state.zoom + state.center.x;
+            const complexY = (touchY - canvas.height / 2) / state.zoom * -1 + state.center.y;
+
+            // Apply zoom in
+            const zoomFactor = state.zoomFactor;
+            state.zoom *= zoomFactor;
+
+            // Adjust center to zoom toward touch position
+            state.center.x = complexX - (complexX - state.center.x) / zoomFactor;
+            state.center.y = complexY - (complexY - state.center.y) / zoomFactor;
+
+            updateInfoDisplay(state);
+        }
+
+        lastTapTime = currentTime;
+
+        // Store initial touch position for panning
+        if (event.touches.length === 1) {
+            lastTouchX = event.touches[0].clientX;
+            lastTouchY = event.touches[0].clientY;
+        }
+        // Store initial distance for pinch zooming
+        else if (event.touches.length === 2) {
+            const dx = event.touches[0].clientX - event.touches[1].clientX;
+            const dy = event.touches[0].clientY - event.touches[1].clientY;
+            initialPinchDistance = Math.sqrt(dx * dx + dy * dy);
+        }
+    }, { passive: false });
+
+    // Touch move handler
+    canvas.addEventListener('touchmove', (event) => {
+        event.preventDefault();
+
+        // Handle single touch (panning)
+        if (event.touches.length === 1) {
+            const touch = event.touches[0];
+            const deltaX = touch.clientX - lastTouchX;
+            const deltaY = touch.clientY - lastTouchY;
+
+            state.center.x -= deltaX / state.zoom;
+            state.center.y -= deltaY / state.zoom * -1; // Invert Y for natural drag direction
+
+            lastTouchX = touch.clientX;
+            lastTouchY = touch.clientY;
+
+            updateInfoDisplay(state);
+        }
+        // Handle pinch (zooming)
+        else if (event.touches.length === 2) {
+            // Calculate current pinch distance
+            const dx = event.touches[0].clientX - event.touches[1].clientX;
+            const dy = event.touches[0].clientY - event.touches[1].clientY;
+            const currentDistance = Math.sqrt(dx * dx + dy * dy);
+
+            if (initialPinchDistance > 0) {
+                // Calculate pinch center point (midpoint between fingers)
+                const centerX = (event.touches[0].clientX + event.touches[1].clientX) / 2;
+                const centerY = (event.touches[0].clientY + event.touches[1].clientY) / 2;
+
+                // Convert to canvas coordinates
+                const rect = canvas.getBoundingClientRect();
+                const canvasCenterX = centerX - rect.left;
+                const canvasCenterY = centerY - rect.top;
+
+                // Convert to complex plane coordinates
+                const complexX = (canvasCenterX - canvas.width / 2) / state.zoom + state.center.x;
+                const complexY = (canvasCenterY - canvas.height / 2) / state.zoom * -1 + state.center.y;
+
+                // Calculate zoom factor based on pinch distance change
+                const zoomFactor = currentDistance / initialPinchDistance;
+
+                // Apply zoom
+                const scaledZoomFactor = zoomFactor > 1 ?
+                    1 + (zoomFactor - 1) :
+                    1 - (1 - zoomFactor);
+
+                state.zoom *= scaledZoomFactor;
+
+                // Adjust center to zoom toward pinch center
+                state.center.x = complexX - (complexX - state.center.x) / scaledZoomFactor;
+                state.center.y = complexY - (complexY - state.center.y) / scaledZoomFactor;
+
+                initialPinchDistance = currentDistance; // Update for next move event
+                updateInfoDisplay(state);
+            }
+        }
+    }, { passive: false });
+
+    // Touch end handler
+    canvas.addEventListener('touchend', (event) => {
+        event.preventDefault();
+        if (event.touches.length === 0) {
+            initialPinchDistance = 0;
+        } else if (event.touches.length === 1) {
+            lastTouchX = event.touches[0].clientX;
+            lastTouchY = event.touches[0].clientY;
+        }
+    }, { passive: false });
+
+    // Prevent default touch actions to avoid browser gestures interfering
+    canvas.addEventListener('touchcancel', (event) => {
+        event.preventDefault();
+        initialPinchDistance = 0;
+    }, { passive: false });
 }
